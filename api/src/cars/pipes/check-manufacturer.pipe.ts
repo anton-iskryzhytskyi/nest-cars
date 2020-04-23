@@ -2,7 +2,7 @@ import {
   PipeTransform,
   Injectable,
   BadRequestException
-} from '@nestjs/common';
+} from '@nestjs/common'
 import { Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
 import { WithManufacturerId } from '../interfaces/with-manufacturer-id'
@@ -29,6 +29,6 @@ export class CheckManufacturerPipe<T extends WithManufacturerId> implements Pipe
       throw new BadRequestException('Manufacturer with such id doesn`t exist')
     }
 
-    return value;
+    return value
   }
 }

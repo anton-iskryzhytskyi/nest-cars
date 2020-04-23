@@ -1,4 +1,4 @@
-import { applyDecorators } from '@nestjs/common';
+import { applyDecorators } from '@nestjs/common'
 import { ApiQuery, ApiResponse } from '@nestjs/swagger'
 import { CarListDTO } from './dto/car-list.dto'
 import {CarDTO} from './dto/car.dto'

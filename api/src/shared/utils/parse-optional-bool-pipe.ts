@@ -1,4 +1,4 @@
-import { PipeTransform, Injectable, BadRequestException } from '@nestjs/common';
+import { PipeTransform, Injectable, BadRequestException } from '@nestjs/common'
 
 @Injectable()
 export class ParseOptionalBoolPipe implements PipeTransform<string | boolean | undefined, boolean | undefined> {
