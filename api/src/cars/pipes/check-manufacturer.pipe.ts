@@ -1,13 +1,12 @@
 import {
   PipeTransform,
   Injectable,
-  NotFoundException
+  BadRequestException
 } from '@nestjs/common';
 import { Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
 import { WithManufacturerId } from '../interfaces/with-manufacturer-id'
 import { ManufacturerEntity } from '../entity'
-
 
 @Injectable()
 export class CheckManufacturerPipe<T extends WithManufacturerId> implements PipeTransform<T> {
@@ -20,11 +19,14 @@ export class CheckManufacturerPipe<T extends WithManufacturerId> implements Pipe
       return value
     }
 
-    const manufacturerEntity = await this.manufacturersRepository.findOne({ id: value.manufacturerId })
+    const isExist = await this.manufacturersRepository
+      .count({ id: value.manufacturerId })
+      .then(count => count > 0)
 
-    if (!manufacturerEntity) {
-      // throw new ConflictException('')
-      throw new NotFoundException('Manufacturer with such id doesn`t exist')
+    if (!isExist) {
+      // TODO discuss which error is suitable
+      // BadRequest means manufacturer id is not valid because it doesn't exist
+      throw new BadRequestException('Manufacturer with such id doesn`t exist')
     }
 
     return value;
