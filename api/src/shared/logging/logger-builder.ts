@@ -1,9 +1,10 @@
-import {Logger, LoggerLevel, LoggerType} from './interfaces'
-import {FileLogger} from './file-logger'
+import { Logger, LoggerLevel, LoggerType } from './interfaces'
+import { StreamLogger } from './stream-logger'
+import { createWriteStream } from "fs"
+import { Writable } from "stream"
 
 export class LoggerBuilder {
-  private useConsole: boolean
-  private fileName: string
+  private writeStream: Writable
   private level: LoggerLevel
   private labels: string[]
   private type: LoggerType
@@ -12,13 +13,13 @@ export class LoggerBuilder {
     return new LoggerBuilder()
   }
 
-  public withUseConsole(value: boolean): LoggerBuilder {
-    this.useConsole = value
+  public withConsole(): LoggerBuilder {
+    this.writeStream = process.stdout
     return this
   }
 
-  public withFileName(value: string): LoggerBuilder {
-    this.fileName = value
+  public withFile(value: string): LoggerBuilder {
+    this.writeStream = createWriteStream(value,{ flags: 'a' })
     return this
   }
 
@@ -33,23 +34,16 @@ export class LoggerBuilder {
   }
 
   public build(): Logger {
-    if (this.type === LoggerType.file && !this.fileName) {
-      throw new Error('File name must be set')
-    }
-    if(this.type === LoggerType.file) {
-      return FileLogger.create(
-        this.useConsole,
-        this.fileName,
-        this.level,
-        this.labels
-      )
-    }
+    return StreamLogger.create(
+      this.writeStream,
+      this.level,
+      this.labels
+    )
   }
 
   private constructor() {
-    this.useConsole = false
-    this.fileName = null
-    this.level = LoggerLevel.debug
+    this.writeStream = process.stdout
+    this.level = 'debug'
     this.labels = []
     this.type = LoggerType.file
   }

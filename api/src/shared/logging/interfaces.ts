@@ -4,13 +4,10 @@ export interface Logger {
   error: (message: string, data: { [k: string]: any }) => void;
 }
 
-export enum LoggerLevel {
-  debug,
-  info,
-  error
-}
+export type LoggerLevel = 'debug' | 'info' | 'error'
 
 export enum LoggerType {
   // only one options for now
-  file
+  file,
+  console
 }
