@@ -1,0 +1,10 @@
+{
+  "type": "postgres",
+  "host": "localhost",
+  "port": 15432,
+  "username": "user",
+  "password": "password",
+  "database": "nestcars",
+  "entities": ["dist/**/entity/*.entity.js"],
+  "logging": true
+}
