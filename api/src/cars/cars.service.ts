@@ -26,7 +26,7 @@ export class CarsService {
       .getManyAndCount()
   }
 
-  public findOne(id: string, includeManufacturer?: boolean, includeOwners?: boolean) {
+  public findOne(id: string, includeManufacturer = true, includeOwners = true) {
     return this.initFindQueryBuilder(includeManufacturer, includeOwners)
       .where("car.id = :id", { id })
       .getOne()
