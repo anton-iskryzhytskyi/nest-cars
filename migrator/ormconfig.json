@@ -1,0 +1,16 @@
+{
+   "type": "postgres",
+   "host": "localhost",
+   "port": 15432,
+   "username": "user",
+   "password": "password",
+   "database": "nestcars",
+   "logging": true,
+   "migrations": [
+      "migrations/**/*.ts"
+   ],
+   "cli": {
+      "migrationsDir": "migrations",
+      "entitiesDir": "entity"
+   }
+}
