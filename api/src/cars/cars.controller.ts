@@ -71,23 +71,23 @@ export class CarsController {
   @Post()
   @UsePipes(CheckManufacturerPipe)
   @SwaggerCreate()
-  create(@Body() entity: CreateCarDTO) {
-    return this.crudService.create(entity)
+  async create(@Body() entity: CreateCarDTO) {
+    await this.crudService.create(entity)
   }
 
   @Patch(':id')
   @HttpCode(204)
   @UsePipes(CheckManufacturerPipe)
   @SwaggerUpdate()
-  update(@Param('id', ParseUUIDPipe, CheckCarByIdPipe) id: string, @Body() entity: UpdateCarDTO) {
-    return this.crudService.update(id, entity)
+  async update(@Param('id', ParseUUIDPipe, CheckCarByIdPipe) id: string, @Body() entity: UpdateCarDTO) {
+    await this.crudService.update(id, entity)
   }
 
   @Delete(':id')
   @HttpCode(204)
   @SwaggerRemove()
-  remove(@Param('id', ParseUUIDPipe, CheckCarByIdPipe) id: string) {
-    return this.crudService.remove(id)
+  async remove(@Param('id', ParseUUIDPipe, CheckCarByIdPipe) id: string) {
+    await this.crudService.remove(id)
   }
 
   @Get(':id/owners')
@@ -98,8 +98,8 @@ export class CarsController {
 
   @Post(':id/owners')
   @SwaggerAttachNewOwner()
-  attachNewOwner(@Param('id', ParseUUIDPipe, CheckCarByIdPipe) id: string, @Body() owner: CreateOwnerDTO) {
-    return this.crudService.attachNewOwner(id, owner)
+  async attachNewOwner(@Param('id', ParseUUIDPipe, CheckCarByIdPipe) id: string, @Body() owner: CreateOwnerDTO) {
+    await this.crudService.attachNewOwner(id, owner)
   }
 
   @Get(':id/manufacturer')
