@@ -29,12 +29,30 @@ const database = (): TypeOrmModuleOptions => ({
   entities: ['dist/**/*.entity{.ts,.js}'],
 })
 
-const specialAction = (): SpecialActionConfig => ({
-  ownerPurchaseDateMonthCount: parseInt(getEnv('OWNER_PURCHASE_DATE_MONTH_COUNT')),
-  discountPercent: parseInt(getEnv('DISCOUNT_PERCENT')),
-  carRegisteredFromMonthCount: parseInt(getEnv('CAR_REGISTERED_FROM_MONTH_COUNT')),
-  carRegisteredToMonthCount: parseInt(getEnv('CAR_REGISTERED_TO_MONTH_COUNT')),
-})
+const parseIntOrReturnUndefined = (str: string): number => {
+  if (!str) {
+    return undefined
+  }
+  const value = parseInt(str)
+  if (isNaN(value)) {
+    return undefined
+  }
+}
+
+const specialAction = (): SpecialActionConfig => {
+
+  const ownerPurchaseDateMonthCount = parseIntOrReturnUndefined(getEnv('OWNER_PURCHASE_DATE_MONTH_COUNT')) || 18
+  const discountPercent = parseIntOrReturnUndefined(getEnv('DISCOUNT_PERCENT')) || 20
+  const carRegisteredFromMonthCount = parseIntOrReturnUndefined(getEnv('CAR_REGISTERED_FROM_MONTH_COUNT')) || 18
+  const carRegisteredToMonthCount = parseIntOrReturnUndefined(getEnv('CAR_REGISTERED_TO_MONTH_COUNT')) || 12
+
+  return  {
+    ownerPurchaseDateMonthCount,
+    discountPercent,
+    carRegisteredToMonthCount,
+    carRegisteredFromMonthCount
+  }
+}
 
 const app = (): AppConfig => ({
   port: parseInt(getEnv('APP_PORT'))

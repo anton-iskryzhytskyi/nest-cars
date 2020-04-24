@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
-import { CarEntity, ManufacturerEntity, OwnerEntity } from './entity'
-import { CreateCarDTO } from './dto/create-car.dto'
-import { UpdateCarDTO } from './dto/update-car.dto'
-import { CreateOwnerDTO } from './dto/create-owner.dto'
+import { CarEntity, ManufacturerEntity, OwnerEntity } from '../entity'
+import { CreateCarDTO } from '../dto/create-car.dto'
+import { UpdateCarDTO } from '../dto/update-car.dto'
+import { CreateOwnerDTO } from '../dto/create-owner.dto'
 
 
 @Injectable()
-export class CarsService {
+export class CarsCrudService {
   constructor(
     @InjectRepository(CarEntity) private readonly carsRepository: Repository<CarEntity>,
     @InjectRepository(OwnerEntity) private readonly ownerRepository: Repository<OwnerEntity>

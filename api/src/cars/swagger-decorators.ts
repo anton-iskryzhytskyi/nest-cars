@@ -9,6 +9,7 @@ export const SwaggerFind = () => {
   return applyDecorators(
     ApiResponse({ status: 200, type: CarListDTO }),
     ApiResponse({ status: 400, description: 'Bad request' }),
+    ApiResponse({ status: 500, description: 'Internal server error' }),
     ApiQuery({ name: 'offset', type: Number, required: false }),
     ApiQuery({ name: 'limit', type: Number, required: false }),
     ApiQuery({ name: 'includeManufacturer', type: Boolean, required: false }),
@@ -19,14 +20,16 @@ export const SwaggerFind = () => {
 export const SwaggerCreate = () => {
   return applyDecorators(
     ApiResponse({ status: 201, description: 'Car was successfully created' }),
-    ApiResponse({ status: 400, description: 'Bad request' })
+    ApiResponse({ status: 400, description: 'Bad request' }),
+    ApiResponse({ status: 500, description: 'Internal server error' }),
   )
 }
 
 export const SwaggerFindOme = () => {
   return applyDecorators(
     ApiResponse({ status: 200, type: CarDTO }),
-    ApiResponse({ status: 404, description: 'Car not found' })
+    ApiResponse({ status: 404, description: 'Car not found' }),
+    ApiResponse({ status: 500, description: 'Internal server error' }),
   )
 }
 
@@ -35,20 +38,23 @@ export const SwaggerUpdate = () => {
     ApiResponse({ status: 204, description: 'Car was successfully updated' }),
     ApiResponse({ status: 400, description: 'Bad request' }),
     ApiResponse({ status: 404, description: 'Car not found' }),
+    ApiResponse({ status: 500, description: 'Internal server error' }),
   )
 }
 
 export const SwaggerRemove = () => {
   return applyDecorators(
     ApiResponse({ status: 204, description: 'Car was successfully deleted' }),
-    ApiResponse({ status: 404, description: 'Car not found' })
+    ApiResponse({ status: 404, description: 'Car not found' }),
+    ApiResponse({ status: 500, description: 'Internal server error' }),
   )
 }
 
 export const SwaggerFindOwners = () => {
   return applyDecorators(
     ApiResponse({ status: 200, type: [OwnerDTO] }),
-    ApiResponse({ status: 404, description: 'Car not found' })
+    ApiResponse({ status: 404, description: 'Car not found' }),
+    ApiResponse({ status: 500, description: 'Internal server error' }),
   )
 }
 
@@ -57,13 +63,22 @@ export const SwaggerAttachNewOwner = () => {
     ApiResponse({ status: 201, description: 'New owner was attached to the car' }),
     ApiResponse({ status: 400, description: 'Bad request' }),
     ApiResponse({ status: 404, description: 'Car not found' }),
+    ApiResponse({ status: 500, description: 'Internal server error' }),
   )
 }
 
 export const SwaggerFindManufacturer = () => {
   return applyDecorators(
     ApiResponse({ status: 200, type: ManufacturerDTO }),
-    ApiResponse({ status: 404, description: 'Car not found' })
+    ApiResponse({ status: 404, description: 'Car not found' }),
+    ApiResponse({ status: 500, description: 'Internal server error' }),
+  )
+}
+
+export const SwaggerSpecialAction = () => {
+  return applyDecorators(
+    ApiResponse({ status: 204, description: 'Action was successfully processed' }),
+    ApiResponse({ status: 500, description: 'Internal server error' })
   )
 }
 
