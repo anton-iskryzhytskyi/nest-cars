@@ -1,16 +1,10 @@
-import {MiddlewareConsumer, Module, NestModule} from '@nestjs/common'
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { ConfigModule, ConfigService } from '@nestjs/config'
+import { LoggerModule } from 'nestjs-pino'
 import { CarsModule } from './cars/cars.module'
 import configurations from './shared/configurations'
-import { Logger } from './shared/logging/interfaces'
-import { AppLogger } from './shared/logging/app-logger'
-import { createLoggingMiddleware } from './shared/middlewares/logging.middleware'
-
-const setupAppLogger = (): Logger => {
-
-  return AppLogger.create([])
-}
+import { LoggingMiddleware } from './shared/middlewares/logging.middleware'
 
 @Module({
   imports: [
@@ -18,6 +12,11 @@ const setupAppLogger = (): Logger => {
       isGlobal: true,
       envFilePath: ['.env', '.env.sample'],
       load: [configurations]
+    }),
+    LoggerModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (config: ConfigService) => config.get('logger'),
+      inject: [ConfigService]
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -32,7 +31,7 @@ const setupAppLogger = (): Logger => {
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
-      .apply(createLoggingMiddleware(setupAppLogger()))
+      .apply(LoggingMiddleware)
       .forRoutes('*')
   }
 }

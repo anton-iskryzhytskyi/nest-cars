@@ -1,4 +1,6 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm'
+import { Params as PinoParams } from 'nestjs-pino'
+import { createWriteStream } from 'fs'
 
 export interface AppConfig {
   port: number
@@ -38,8 +40,17 @@ const app = (): AppConfig => ({
   port: parseInt(getEnv('APP_PORT'))
 })
 
+const logger = (): PinoParams => ({
+  pinoHttp: {
+    name: getEnv('LOG_NAME'),
+    level: getEnv('LOG_LEVEL'),
+    stream: createWriteStream(getEnv('LOG_FILE'), { flags: 'a' })
+  }
+})
+
 export default () => ({
   app: app(),
+  logger: logger(),
   database: database(),
   specialAction: specialAction()
 })

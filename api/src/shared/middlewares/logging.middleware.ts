@@ -1,20 +1,26 @@
+import { Injectable, NestMiddleware } from '@nestjs/common'
+import { Logger } from 'nestjs-pino'
 import { Request, Response } from 'express'
-import { Logger } from '../logging/interfaces'
 
-export const createLoggingMiddleware = (logger: Logger) => (req: Request, res: Response, next: Function) => {
-  const { query, method, path, params } = req
-  const startTs = Date.now()
+@Injectable()
+export class LoggingMiddleware implements NestMiddleware {
+  constructor(private readonly logger: Logger) {}
 
-  logger.debug('request - start', { query, method, path, params, startTs })
+  use(req: Request, res: Response, next: Function) {
+    const startTs = Date.now()
+    const { query, method, path, params } = req
 
-  res.on('finish', () => {
-    const endTs = Date.now()
+    this.logger.debug({ query, method, path, params, startTs }, LoggingMiddleware.name)
 
-    logger.debug(
-      'request - start',
-      { query, method, path, params, startTs, endTs, durationMs: endTs - startTs },
-    )
-  })
+    res.on('finish', () => {
+      const endTs = Date.now()
 
-  next()
+      this.logger.debug(
+        { query, method, path, params, startTs, endTs, durationMs: endTs - startTs },
+        LoggingMiddleware.name
+      )
+    })
+
+    next()
+  }
 }
