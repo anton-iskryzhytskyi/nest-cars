@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "license": "UNLICENSED",
-  "main": "dist/index.js",
+  "main": "dist/main.js",
   "scripts": {
-    "prebuild": "rimraf dist",
+    "prebuild": "rm -rf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
@@ -34,7 +34,6 @@
     "nestjs-pino": "^1.2.0",
     "pg": "^8.0.2",
     "reflect-metadata": "^0.1.13",
-    "rimraf": "^3.0.2",
     "rxjs": "^6.5.4",
     "swagger-ui-express": "^4.1.4",
     "typeorm": "^0.2.24"

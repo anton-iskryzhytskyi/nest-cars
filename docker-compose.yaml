@@ -2,6 +2,24 @@ version: '3.1'
 
 services:
 
+  api:
+    build: ./api
+    restart: always
+    ports:
+      - '3000:3000'
+    environment:
+      APP_PORT: 3000
+      LOG_FILE: ./logs.txt
+      LOG_NAME: cars_api
+      LOG_LEVEL: debug
+
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DATABASE: nestcars
+
+
   postgres:
     image: postgres:11.2
     restart: always
