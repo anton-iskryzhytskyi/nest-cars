@@ -1,38 +1,38 @@
 import {MiddlewareConsumer, Module, NestModule} from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
+import { ConfigModule, ConfigService } from '@nestjs/config'
 import { CarsModule } from './cars/cars.module'
-import { EnvConfig } from './shared/config/env-config'
-import {Config} from './shared/config/interfaces'
-import {Logger} from './shared/logging/interfaces'
-import {LoggerBuilder} from './shared/logging/logger-builder'
-import {AppLogger} from './shared/logging/app-logger'
+import configurations from './shared/configurations'
+import { Logger } from './shared/logging/interfaces'
+import { AppLogger } from './shared/logging/app-logger'
 import { createLoggingMiddleware } from './shared/middlewares/logging.middleware'
 
-const setupAppLogger = (config: Config): Logger => {
-  const loggerBuilder = LoggerBuilder.create()
-    .withLabels([config.get('APP_LOG_LABEL')])
-    .withLevel(config.get('APP_LOG_LEVEL') as any)
+const setupAppLogger = (): Logger => {
 
-  const consoleLogger = loggerBuilder
-    .withConsole()
-    .build()
-
-  const fileLogger = loggerBuilder
-    .withFile(config.get('LOG_FILE'))
-    .build()
-
-  return AppLogger.create([fileLogger, consoleLogger])
+  return AppLogger.create([])
 }
 
 @Module({
-  imports: [TypeOrmModule.forRoot(EnvConfig.getInstance().getTypeOrmConfig()), CarsModule],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: ['.env', '.env.sample'],
+      load: [configurations]
+    }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (config: ConfigService) => config.get('database'),
+      inject: [ConfigService]
+    }),
+    CarsModule
+  ],
   controllers: [],
   providers: [],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
-      .apply(createLoggingMiddleware(setupAppLogger(EnvConfig.getInstance())))
-      .forRoutes('cars')
+      .apply(createLoggingMiddleware(setupAppLogger()))
+      .forRoutes('*')
   }
 }
