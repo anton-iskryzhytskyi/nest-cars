@@ -5,6 +5,9 @@ services:
   api:
     build: ./api
     restart: always
+    depends_on:
+      - postgres
+      - migrator
     ports:
       - '3000:3000'
     environment:
@@ -19,6 +22,11 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DATABASE: nestcars
 
+
+  migrator:
+    build: ./migrator
+    depends_on:
+      - postgres
 
   postgres:
     image: postgres:11.2
