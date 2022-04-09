@@ -30,7 +30,7 @@
     "@nestjsx/crud": "^4.4.5",
     "class-transformer": "^0.2.3",
     "class-validator": "^0.12.1",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "nestjs-pino": "^1.2.0",
     "pg": "^8.0.2",
     "reflect-metadata": "^0.1.13",
